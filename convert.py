@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import csv
 import sys
@@ -55,13 +55,13 @@ LISTED_OR_UNLISTED = { "0" : "FALSE",
 
 def convert_911_row(row):
     global CURRENT_911_ROW
-    new_row = [CURRENT_911_ROW]
+    new_row = [ CURRENT_911_ROW, 
+                *row[1:3], 
+                SERVICE_CLASS_ABBR[row[3]], 
+                re.sub(r"\s{2,}", " ", (" ".join(row[4:10])).strip()), 
+                row[10], 
+                LISTED_OR_UNLISTED[row[11]] ]
     CURRENT_911_ROW += 1
-    new_row += row[1:3] + [SERVICE_CLASS_ABBR[row[3]]]
-    address_col = " ".join(row[4:10])
-    new_row += [re.sub(r"\s{2,}", " ", address_col.strip())]
-    new_row += [row[10]]
-    new_row += [LISTED_OR_UNLISTED[row[11]]]
     return new_row
 
 SOURCE_TEMPLATE = "Number,CompID1,F,House #,House Sfx,Pre Dir,Street Name,Street Sfx,Post Dir,Community Name,County,State,Customer,ESN,Location,Exchange,Class,Type,Main No,Zip,Zip4,CompID2,TAR,Alt. No,Extract,Entry Date,Last_Update"
